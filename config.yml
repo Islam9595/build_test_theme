@@ -1,4 +1,5 @@
-development:
-password: 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
-theme_id: "121354911796"
-store: test-ie95.myshopify.com
+  development:
+    password: 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
+    theme_id: "121355239476"
+    store: test-ie95.myshopify.com
+
