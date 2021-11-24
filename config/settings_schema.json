@@ -8,6 +8,25 @@
     "theme_support_url": "https:\/\/support.shopify.com\/"
   },
   {
+    "name": "islam",
+    "settings": [
+      {
+        "type": "header",
+        "content": "islamemam"
+      },
+      {
+        "type": "image_picker",
+        "id": "image_test",
+        "label": "image_testing"
+      },
+      {
+        "type": "text",
+        "id": "text_test",
+        "label": "text_testing"
+      }
+    ]
+  },
+  {
     "name": {
       "cs": "Barvy",
       "da": "Farver",
