@@ -1,37 +1,35 @@
-<div data-section-id="{{ section.id }}" data-section-type="collection-list-section">
-
+<div class="page-width">
   {% if section.settings.title != blank %}
-  <div class="section-header section-header--small">
-    <h2 class="section-header__title">{{ section.settings.title | escape }}</h2>
-  </div>
+    <div class="section-header text-center">
+      <h2>{{ section.settings.title | escape }}</h2>
+    </div>
   {% endif %}
 
-  <div class="grid-uniform">
-    {% case section.blocks.size %}
-      {% when 1 %}
-        {%- assign collection_item_width = 'one-half' -%}
-        {%- assign collection_width = 625 -%}
-      {% when 2 %}
-        {%- assign collection_item_width = 'one-half' -%}
-        {%- assign collection_width = 625 -%}
-      {% when 3 %}
-        {%- assign collection_item_width = 'medium-down--one-half one-third' -%}
-        {%- assign collection_width = 410 -%}
-      {% when 4 %}
-        {%- assign collection_item_width = 'medium-down--one-half one-quarter' -%}
-        {%- assign collection_width = 330 -%}
-      {% when 5 %}
-        {%- assign collection_item_width = 'small--one-half medium--one-third post-large--one-fifth' -%}
-        {%- assign collection_width = 235 -%}
-    {% endcase %}
+  {% case section.settings.grid %}
+    {% when 2 %}
+      {%- assign grid_item_width = 'medium-up--one-half' -%}
+    {% when 3 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+    {% when 4 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+    {% when 5 %}
+      {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+  {% endcase %}
 
-    {% for block in section.blocks limit: section.blocks.size %}
-      {% assign featured = block.settings.collection %}
-      <div class="grid__item {{collection_item_width}} text-center" {{ block.shopify_attributes }}>
-        {% include 'collection-grid-item' with collection_width: collection_width %}
-      </div>
-    {% endfor %}
+  <div class="collection-grid">
+    <ul class="grid grid--uniform">
+      {% for block in section.blocks limit: section.blocks.size %}
+        <li class="grid__item {{ grid_item_width }}" {{ block.shopify_attributes }}>
+          {%- assign collection = collections[block.settings.collection] -%}
+          {% include 'collection-grid-item', collection: collection %}
+        </li>
+      {% endfor %}
+    </ul>
   </div>
+
+  {% if section.blocks.size == 0 %}
+    {% include 'no-blocks' %}
+  {% endif %}
 </div>
 
 
@@ -62,7 +60,7 @@
     "zh-TW": "商品系列清單"
   },
   "class": "index-section",
-  "max_blocks": 5,
+  "max_blocks": 12,
   "settings": [
     {
       "type": "text",
@@ -74,8 +72,8 @@
         "en": "Heading",
         "es": "Título",
         "fi": "Otsake",
-        "fr": "Titre",
-        "it": "Heading",
+        "fr": "En-tête",
+        "it": "Titolo",
         "ja": "見出し",
         "ko": "제목",
         "nb": "Overskrift",
@@ -113,11 +111,42 @@
         "zh-CN": "产品系列列表",
         "zh-TW": "商品系列清單"
       }
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": {
+        "cs": "Počet kolekcí na řádek",
+        "da": "Kollektioner pr. række",
+        "de": "Kategorien per Reihe",
+        "en": "Collections per row",
+        "es": "Colecciones por fila",
+        "fi": "Kokoelmia per rivi",
+        "fr": "Collections par rangée",
+        "it": "Collezioni per riga",
+        "ja": "行あたりのコレクション数",
+        "ko": "열 별 컬렉션",
+        "nb": "Samlinger per rad",
+        "nl": "Collecties per rij",
+        "pl": "Liczba kolekcji na wiersz",
+        "pt-BR": "Coleções por linha",
+        "pt-PT": "Coleções por linha",
+        "sv": "Produktserier per rad",
+        "th": "คอลเลกชันต่อแถว",
+        "tr": "Satır başına koleksiyon",
+        "vi": "Số bộ sưu tập trên mỗi hàng",
+        "zh-CN": "每行产品系列数",
+        "zh-TW": "每列商品系列數"
+      },
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 3
     }
   ],
   "blocks": [
     {
-      "type": "collection",
+      "type": "featured_collection",
       "name": {
         "cs": "Kolekce",
         "da": "Kollektion",
@@ -143,8 +172,6 @@
       },
       "settings": [
         {
-          "type": "collection",
-          "id": "collection",
           "label": {
             "cs": "Kolekce",
             "da": "Kollektion",
@@ -167,7 +194,9 @@
             "vi": "Bộ sưu tập",
             "zh-CN": "收藏",
             "zh-TW": "商品系列"
-          }
+          },
+          "id": "collection",
+          "type": "collection"
         }
       ]
     }
@@ -181,7 +210,7 @@
         "en": "Collection list",
         "es": "Lista de colecciones",
         "fi": "Kokoelmaluettelo",
-        "fr": "Page des collections",
+        "fr": "Page de liste des collections",
         "it": "Elenco delle collezioni",
         "ja": "コレクションリスト",
         "ko": "컬렉션 목록",
@@ -222,16 +251,13 @@
       },
       "blocks": [
         {
-          "type": "collection"
+          "type": "featured_collection"
         },
         {
-          "type": "collection"
+          "type": "featured_collection"
         },
         {
-          "type": "collection"
-        },
-        {
-          "type": "collection"
+          "type": "featured_collection"
         }
       ]
     }
